@@ -3,155 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Spinner</title>
+    <title>Diwali-Themed Quiz Interface</title>
     <style>
+        /* General Styles */
         body {
-            font-family: Arial, sans-serif;
-            background-image: url('Diwali-background.jpg'); /* Update with your image path */
+            font-family: 'Roboto', sans-serif;
+            background-image: url('Diwali-background.jpg'); /* Add a Diwali-themed background image here */
             background-size: cover;
             background-attachment: fixed;
-            background-position: center;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
             margin: 0;
-            color: #333;
+            padding: 20px;
+            color: ivory;
         }
         h1 {
             font-size: 2em;
-            color: #333;
-            margin-bottom: 20px;
+            color: #FFD700; /* Gold color for festive look */
+            margin-top: 20px;
         }
-        /* Spinner Container */
-        .spinner-container {
-            position: relative;
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            overflow: hidden;
+
+        /* Card and Container Styles */
+        .card-container, .question-container, .answer-container, .feedback-container {
             display: flex;
-            align-items: center;
+            flex-wrap: wrap;
             justify-content: center;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            margin-top: 20px;
         }
-        /* Spinner Segments */
-        .segment {
-            position: absolute;
-            width: 50%;
-            height: 50%;
-            background-color: transparent;
-            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 1em;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        .segment:hover { background-color: rgba(0, 0, 0, 0.1); }
-        
-        /* Colors and Rotation */
-        .segment1 { background-color: #4CAF50; transform: rotate(0deg) skewY(-30deg); }
-        .segment2 { background-color: #FFEB3B; transform: rotate(60deg) skewY(-30deg); }
-        .segment3 { background-color: #FF5722; transform: rotate(120deg) skewY(-30deg); }
-        .segment4 { background-color: #03A9F4; transform: rotate(180deg) skewY(-30deg); }
-        .segment5 { background-color: #E91E63; transform: rotate(240deg) skewY(-30deg); }
-        .segment6 { background-color: #9C27B0; transform: rotate(300deg) skewY(-30deg); }
-        
-        /* Question, Answer, and Feedback Containers */
-        .question-container, .answer-container, .feedback-container {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.6);
-            padding: 20px;
+        .card {
+            background-color: rgba(255, 87, 34, 0.9); /* Saffron-like color */
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin-top: 30px;
+            margin: 15px;
+            padding: 20px;
+            width: 200px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: ivory;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.3s;
         }
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Question & Answer Box */
+        .question-box, .answer-box {
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        /* Buttons */
         .button {
-            background-color: #FFD700;
+            background-color: #FFD700; /* Gold color */
             color: #333;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
             margin: 5px;
         }
-        .emoji { font-size: 2em; margin-bottom: 10px; }
-        .feedback-message { font-size: 1.5em; margin-bottom: 20px; }
+        .button:hover {
+            background-color: #FFB300; /* Slightly darker gold */
+        }
+
+        /* Feedback Container */
+        .feedback-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: ivory;
+        }
+        .feedback-message {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .emoji {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Select a Category</h1>
-
-    <!-- Spinner Wheel -->
-    <div class="spinner-container">
-        <div class="segment segment1" onclick="selectCategory('Science')">Science</div>
-        <div class="segment segment2" onclick="selectCategory('History')">History</div>
-        <div class="segment segment3" onclick="selectCategory('Literature')">Literature</div>
-        <div class="segment segment4" onclick="selectCategory('Math')">Math</div>
-        <div class="segment segment5" onclick="selectCategory('Geography')">Geography</div>
-        <div class="segment segment6" onclick="selectCategory('Art')">Art</div>
+    <h1>Welcome to the Diwali Quiz!</h1>
+    <div id="categorySelection" class="card-container">
+        <div class="card" onclick="selectCategory('BAPS Swaminarayan')">BAPS Swaminarayan</div>
+        <div class="card" onclick="selectCategory('Diwali')">Diwali</div>
+        <div class="card" onclick="selectCategory('Eternal Sanatan Dharma teachings')">Sanatan Dharma</div>
+        <div class="card" onclick="selectCategory('Hindu Festivals')">Hindu Festivals</div>
+        <div class="card" onclick="selectCategory('India\'s Gifts to the World')">India's Gifts</div>
+        <div class="card" onclick="selectCategory('Mahabharat')">Mahabharat</div>
+        <div class="card" onclick="selectCategory('Ramayan')">Ramayan</div>
     </div>
 
-    <!-- Question Display -->
-    <div id="questionDisplay" class="question-container">
-        <div id="questionText"></div>
-        <button class="button" onclick="showAnswer()">Show Answer</button>
+    <div id="questionDisplay" class="question-container" style="display: none;">
+        <div class="question-box">
+            <div id="questionText"></div>
+            <button class="button" onclick="showAnswer()">Show Answer</button>
+            <button class="button" onclick="generateRandomQuestion()">Next Question</button>
+        </div>
     </div>
 
-    <!-- Answer Display -->
-    <div id="answerDisplay" class="answer-container">
-        <div id="answerText"></div>
-        <button class="button" onclick="markCorrect()">Correct</button>
-        <button class="button" onclick="markIncorrect()">Incorrect</button>
+    <div id="answerDisplay" class="answer-container" style="display: none;">
+        <div class="answer-box">
+            <div id="answerText"></div>
+            <button class="button" onclick="markCorrect()">Correct</button>
+            <button class="button" onclick="markIncorrect()">Incorrect</button>
+        </div>
     </div>
 
-    <!-- Feedback Display for Correct and Incorrect -->
+    <!-- Feedback Pages for Correct/Incorrect -->
     <div id="correctFeedback" class="feedback-container">
         <div class="emoji">🎉</div>
-        <div class="feedback-message">Correct! Well done! 🎉</div>
+        <div class="feedback-message">Correct! Shubh Diwali! ✨</div>
         <button class="button" onclick="returnToHome()">Return to Home</button>
     </div>
     <div id="incorrectFeedback" class="feedback-container">
         <div class="emoji">🙏</div>
-        <div class="feedback-message">Try Again! Keep Going!</div>
+        <div class="feedback-message">Try Again! 🌼 Keep Going!</div>
         <button class="button" onclick="returnToHome()">Return to Home</button>
     </div>
 
     <script>
         const questions = {
-            Science: [
-                { question: "What is the speed of light?", answer: "299,792,458 meters per second" },
-                { question: "What planet is known as the Red Planet?", answer: "Mars" }
+            "BAPS Swaminarayan": [
+                { question: "What does BAPS stand for?", answer: "Bochansanwasi Akshar Purushottam Swaminarayan Sanstha" },
+                { question: "What was Pramukh Swami Maharaj's life motto?", answer: "In the Joy of Others, Lies Our Own" },
+                { question: "How many BAPS mandirs are there globally?", answer: "Answer C - more than 1300 temples and 5025 centres in the world" },
+                // Add more questions as needed...
             ],
-            History: [
-                { question: "Who was the first President of the United States?", answer: "George Washington" },
-                { question: "In what year did World War II end?", answer: "1945" }
+            "Diwali": [
+                { question: "What other religions celebrate Diwali?", answer: "A, B and some C" },
+                { question: "Why do Jains celebrate Diwali?", answer: "To celebrate Mahavir Bhagwan attaining Nirvana or Moksha" },
+                // Add more questions as needed...
             ],
-            Literature: [
-                { question: "Who wrote 'Pride and Prejudice'?", answer: "Jane Austen" },
-                { question: "Who wrote 'The Raven'?", answer: "Edgar Allan Poe" }
+            "Eternal Sanatan Dharma teachings": [
+                { question: "What does the word Guru mean in Sanskrit?", answer: "In Sanskrit, 'Guru' means one who removes ignorance and guides on the path to God." },
+                { question: "What is Ahimsa?", answer: "Non - violence, hence Hindus follow the path of vegetariansim" },
+                // Add more questions as needed...
             ],
-            Math: [
-                { question: "What is 2 + 2?", answer: "4" },
-                { question: "What is the square root of 16?", answer: "4" }
-            ],
-            Geography: [
-                { question: "What is the largest ocean?", answer: "Pacific Ocean" },
-                { question: "What is the capital of France?", answer: "Paris" }
-            ],
-            Art: [
-                { question: "Who painted the Mona Lisa?", answer: "Leonardo da Vinci" },
-                { question: "What is the art style of 'The Starry Night'?", answer: "Post-Impressionism" }
-            ]
+            // Add additional categories similarly...
         };
 
         let currentCategory = "";
@@ -160,8 +164,8 @@
         function selectCategory(category) {
             currentCategory = category;
             generateRandomQuestion();
-            document.querySelector(".spinner-container").style.display = "none";
-            document.getElementById("questionDisplay").style.display = "flex";
+            document.getElementById("categorySelection").style.display = "none";
+            document.getElementById("questionDisplay").style.display = "block";
         }
 
         function generateRandomQuestion() {
@@ -173,7 +177,7 @@
         function showAnswer() {
             document.getElementById("answerText").textContent = currentQuestion.answer;
             document.getElementById("questionDisplay").style.display = "none";
-            document.getElementById("answerDisplay").style.display = "flex";
+            document.getElementById("answerDisplay").style.display = "block";
         }
 
         function markCorrect() {
@@ -187,7 +191,7 @@
         }
 
         function returnToHome() {
-            document.querySelector(".spinner-container").style.display = "flex";
+            document.getElementById("categorySelection").style.display = "flex";
             document.getElementById("questionDisplay").style.display = "none";
             document.getElementById("answerDisplay").style.display = "none";
             document.getElementById("correctFeedback").style.display = "none";
