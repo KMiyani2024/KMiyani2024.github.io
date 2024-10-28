@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diwali Quiz Spinner</title>
+    <title>Quiz Spinner</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url('Diwali-background.jpg'); /* Add Diwali-themed background */
+            background-image: url('Diwali-background.jpg'); /* Update with your image path */
             background-size: cover;
             background-attachment: fixed;
+            background-position: center;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
+            height: 100vh;
             margin: 0;
-            padding: 20px;
-            color: ivory;
+            color: #333;
         }
         h1 {
             font-size: 2em;
@@ -32,7 +34,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin-top: 50px;
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
         }
         /* Spinner Segments */
@@ -46,11 +47,14 @@
             align-items: center;
             justify-content: center;
             color: #fff;
-            font-size: 1.2em;
-            transform-origin: 100% 100%;
-            text-align: center;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
         }
-        /* Each segment color */
+        .segment:hover { background-color: rgba(0, 0, 0, 0.1); }
+        
+        /* Colors and Rotation */
         .segment1 { background-color: #4CAF50; transform: rotate(0deg) skewY(-30deg); }
         .segment2 { background-color: #FFEB3B; transform: rotate(60deg) skewY(-30deg); }
         .segment3 { background-color: #FF5722; transform: rotate(120deg) skewY(-30deg); }
@@ -58,37 +62,7 @@
         .segment5 { background-color: #E91E63; transform: rotate(240deg) skewY(-30deg); }
         .segment6 { background-color: #9C27B0; transform: rotate(300deg) skewY(-30deg); }
         
-        /* Arrow Pointer */
-        .pointer {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-bottom: 30px solid #333;
-            z-index: 10;
-        }
-
-        /* Spin Button */
-        .spin-button {
-            margin-top: 30px;
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            border: none;
-            color: #fff;
-            font-size: 1.2em;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        .spin-button:hover {
-            background-color: #388E3C;
-        }
-
-        /* Question & Feedback Containers */
+        /* Question, Answer, and Feedback Containers */
         .question-container, .answer-container, .feedback-container {
             display: none;
             flex-direction: column;
@@ -115,27 +89,22 @@
 </head>
 <body>
 
-    <h1>Spin the Wheel!</h1>
+    <h1>Select a Category</h1>
 
     <!-- Spinner Wheel -->
-    <div class="spinner-container" id="spinner">
-        <div class="segment segment1">Science</div>
-        <div class="segment segment2">History</div>
-        <div class="segment segment3">Literature</div>
-        <div class="segment segment4">Math</div>
-        <div class="segment segment5">Geography</div>
-        <div class="segment segment6">Art</div>
+    <div class="spinner-container">
+        <div class="segment segment1" onclick="selectCategory('Science')">Science</div>
+        <div class="segment segment2" onclick="selectCategory('History')">History</div>
+        <div class="segment segment3" onclick="selectCategory('Literature')">Literature</div>
+        <div class="segment segment4" onclick="selectCategory('Math')">Math</div>
+        <div class="segment segment5" onclick="selectCategory('Geography')">Geography</div>
+        <div class="segment segment6" onclick="selectCategory('Art')">Art</div>
     </div>
-    <div class="pointer"></div>
-
-    <!-- Spin Button -->
-    <button class="spin-button" onclick="spinWheel()">Spin</button>
 
     <!-- Question Display -->
     <div id="questionDisplay" class="question-container">
         <div id="questionText"></div>
         <button class="button" onclick="showAnswer()">Show Answer</button>
-        <button class="button" onclick="generateRandomQuestion()">Next Question</button>
     </div>
 
     <!-- Answer Display -->
@@ -187,40 +156,46 @@
 
         let currentCategory = "";
         let currentQuestion = {};
-        let spinning = false;
-
-        function spinWheel() {
-            if (spinning) return;
-
-            spinning = true;
-            const spinner = document.getElementById("spinner");
-            const randomDegree = Math.floor(Math.random() * 360) + (360 * 5);
-
-            spinner.style.transition = "transform 4s ease-out";
-            spinner.style.transform = `rotate(${randomDegree}deg)`;
-
-            setTimeout(() => {
-                spinning = false;
-                const selectedAngle = randomDegree % 360;
-                let selectedCategory;
-
-                if (selectedAngle >= 0 && selectedAngle < 60) {
-                    selectedCategory = "Science";
-                } else if (selectedAngle >= 60 && selectedAngle < 120) {
-                    selectedCategory = "History";
-                } else if (selectedAngle >= 120 && selectedAngle < 180) {
-                    selectedCategory = "Literature";
-                } else if (selectedAngle >= 180 && selectedAngle < 240) {
-                    selectedCategory = "Math";
-                } else if (selectedAngle >= 240 && selectedAngle < 300) {
-                    selectedCategory = "Geography";
-                } else {
-                    selectedCategory = "Art";
-                }
-
-                selectCategory(selectedCategory);
-            }, 4000);
-        }
 
         function selectCategory(category) {
             currentCategory = category;
+            generateRandomQuestion();
+            document.querySelector(".spinner-container").style.display = "none";
+            document.getElementById("questionDisplay").style.display = "flex";
+        }
+
+        function generateRandomQuestion() {
+            const categoryQuestions = questions[currentCategory];
+            currentQuestion = categoryQuestions[Math.floor(Math.random() * categoryQuestions.length)];
+            document.getElementById("questionText").textContent = currentQuestion.question;
+        }
+
+        function showAnswer() {
+            document.getElementById("answerText").textContent = currentQuestion.answer;
+            document.getElementById("questionDisplay").style.display = "none";
+            document.getElementById("answerDisplay").style.display = "flex";
+        }
+
+        function markCorrect() {
+            document.getElementById("answerDisplay").style.display = "none";
+            document.getElementById("correctFeedback").style.display = "flex";
+        }
+
+        function markIncorrect() {
+            document.getElementById("answerDisplay").style.display = "none";
+            document.getElementById("incorrectFeedback").style.display = "flex";
+        }
+
+        function returnToHome() {
+            document.querySelector(".spinner-container").style.display = "flex";
+            document.getElementById("questionDisplay").style.display = "none";
+            document.getElementById("answerDisplay").style.display = "none";
+            document.getElementById("correctFeedback").style.display = "none";
+            document.getElementById("incorrectFeedback").style.display = "none";
+            currentCategory = "";
+            currentQuestion = {};
+        }
+    </script>
+
+</body>
+</html>
