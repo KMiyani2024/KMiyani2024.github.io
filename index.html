@@ -3,29 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modern Card-Based Quiz Interface</title>
+    <title>Diwali-Themed Quiz Interface</title>
     <style>
+        /* General Styles */
         body {
-            font-family: Arial, sans-serif;
-            background-color: #f3f3f3;
+            font-family: 'Roboto', sans-serif;
+            background-image: url('path/to/diwali-background.jpg'); /* Add a Diwali-themed background image here */
+            background-size: cover;
+            background-attachment: fixed;
             display: flex;
             flex-direction: column;
             align-items: center;
             margin: 0;
             padding: 20px;
+            color: ivory;
         }
         h1 {
             font-size: 2em;
-            color: #333;
+            color: #FFD700; /* Gold color for festive look */
+            margin-top: 20px;
         }
-        .card-container, .question-container, .answer-container {
+
+        /* Card and Container Styles */
+        .card-container, .question-container, .answer-container, .feedback-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             margin-top: 20px;
         }
         .card {
-            background-color: #ffffff;
+            background-color: rgba(255, 87, 34, 0.9); /* Saffron-like color */
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             margin: 15px;
@@ -35,46 +42,66 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #fff;
+            color: ivory;
             font-size: 1.2em;
             cursor: pointer;
             transition: transform 0.3s;
         }
         .card:hover {
             transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
-        .card.science { background-color: #4a90e2; }
-        .card.history { background-color: #4caf50; }
-        .card.literature { background-color: #9c27b0; }
+        .card.science { background-color: #6A1B9A; } /* Deep purple for Science */
+        .card.history { background-color: #00796B; } /* Dark teal for History */
+        .card.literature { background-color: #BF360C; } /* Deep saffron for Literature */
+        
+        /* Question & Answer Box */
         .question-box, .answer-box {
-            background-color: #ffffff;
+            background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent black */
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
             padding: 20px;
             width: 300px;
             text-align: center;
             margin-top: 20px;
         }
-        .buttons {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 20px;
-        }
+        
+        /* Buttons */
         .button {
-            background-color: #4a90e2;
-            color: #fff;
+            background-color: #FFD700; /* Gold color */
+            color: #333;
             padding: 10px 20px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin: 5px;
         }
-        .button:hover { background-color: #357ab7; }
+        .button:hover {
+            background-color: #FFB300; /* Slightly darker gold */
+        }
+
+        /* Feedback Container */
+        .feedback-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: ivory;
+        }
+        .feedback-message {
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .emoji {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
 
-    <h1>Select a Category</h1>
+    <h1>Welcome to the Diwali Quiz!</h1>
     <div id="categorySelection" class="card-container">
         <div class="card science" onclick="selectCategory('science')">Science</div>
         <div class="card history" onclick="selectCategory('history')">History</div>
@@ -84,21 +111,29 @@
     <div id="questionDisplay" class="question-container" style="display: none;">
         <div class="question-box">
             <div id="questionText"></div>
-            <div class="buttons">
-                <button class="button" onclick="showAnswer()">Show Answer</button>
-                <button class="button" onclick="generateRandomQuestion()">Next Question</button>
-            </div>
+            <button class="button" onclick="showAnswer()">Show Answer</button>
+            <button class="button" onclick="generateRandomQuestion()">Next Question</button>
         </div>
     </div>
 
     <div id="answerDisplay" class="answer-container" style="display: none;">
         <div class="answer-box">
             <div id="answerText"></div>
-            <div class="buttons">
-                <button class="button" onclick="markCorrect()">Correct</button>
-                <button class="button" onclick="markIncorrect()">Incorrect</button>
-            </div>
+            <button class="button" onclick="markCorrect()">Correct</button>
+            <button class="button" onclick="markIncorrect()">Incorrect</button>
         </div>
+    </div>
+
+    <!-- Feedback Pages for Correct/Incorrect -->
+    <div id="correctFeedback" class="feedback-container">
+        <div class="emoji">🎉</div>
+        <div class="feedback-message">Correct! Shubh Diwali! ✨</div>
+        <button class="button" onclick="returnToHome()">Return to Home</button>
+    </div>
+    <div id="incorrectFeedback" class="feedback-container">
+        <div class="emoji">🙏</div>
+        <div class="feedback-message">Try Again! 🌼 Keep Going!</div>
+        <button class="button" onclick="returnToHome()">Return to Home</button>
     </div>
 
     <script>
@@ -106,17 +141,14 @@
             science: [
                 { question: "What is the speed of light?", answer: "299,792,458 meters per second" },
                 { question: "What planet is known as the Red Planet?", answer: "Mars" },
-                { question: "What is the chemical symbol for oxygen?", answer: "O" },
             ],
             history: [
                 { question: "Who was the first President of the United States?", answer: "George Washington" },
                 { question: "In what year did World War II end?", answer: "1945" },
-                { question: "Who was the famous leader of the Mongols?", answer: "Genghis Khan" },
             ],
             literature: [
                 { question: "Who wrote 'Pride and Prejudice'?", answer: "Jane Austen" },
                 { question: "What is the first book of the Bible?", answer: "Genesis" },
-                { question: "Who wrote 'The Raven'?", answer: "Edgar Allan Poe" },
             ]
         };
 
@@ -143,19 +175,21 @@
         }
 
         function markCorrect() {
-            alert("✅ Correct! Well done!");
-            returnToHome();
+            document.getElementById("answerDisplay").style.display = "none";
+            document.getElementById("correctFeedback").style.display = "flex";
         }
 
         function markIncorrect() {
-            alert("❌ Incorrect. Try again!");
-            returnToHome();
+            document.getElementById("answerDisplay").style.display = "none";
+            document.getElementById("incorrectFeedback").style.display = "flex";
         }
 
         function returnToHome() {
             document.getElementById("categorySelection").style.display = "flex";
             document.getElementById("questionDisplay").style.display = "none";
             document.getElementById("answerDisplay").style.display = "none";
+            document.getElementById("correctFeedback").style.display = "none";
+            document.getElementById("incorrectFeedback").style.display = "none";
             currentCategory = "";
             currentQuestion = {};
         }
