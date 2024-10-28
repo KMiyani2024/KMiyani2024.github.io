@@ -3,89 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JSONPlaceholder API Integration</title>
+    <title>Quiz Selector</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-        .post {
-            border: 1px solid #ddd;
-            padding: 10px;
-            margin-bottom: 10px;
-        }
-        .post h3 {
-            margin: 0;
-            font-size: 20px;
-        }
-        .post p {
-            margin: 5px 0;
-        }
+        body { font-family: Arial, sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 50px; }
+        #categorySelection, #questionDisplay, #backButton { display: none; }
+        #categorySelection, #questionDisplay { margin-top: 20px; }
+        button { padding: 10px 20px; margin-top: 20px; }
+        #questionText { font-size: 1.5em; color: #333; }
     </style>
 </head>
 <body>
-    <h1>Posts from JSONPlaceholder</h1>
-    <div id="posts-container">
-        <!-- Fetched posts will be displayed here -->
+
+    <h1 id="homeTitle">Quiz Selector</h1>
+
+    <div id="homeScreen">
+        <label for="category">Select Category:</label>
+        <select id="category">
+            <option value="">--Choose a Category--</option>
+            <option value="science">Science</option>
+            <option value="history">History</option>
+            <option value="literature">Literature</option>
+        </select>
+        <button onclick="generateRandomQuestion()">Generate Random Question</button>
     </div>
 
-    <h2>Users</h2>
-    <div id="users-container">
-        <!-- Fetched users will be displayed here -->
+    <div id="questionDisplay">
+        <div id="questionText"></div>
+        <button onclick="regenerateQuestion()">Generate New Random Question</button>
+        <button onclick="returnToHome()">Return to Home Screen</button>
     </div>
 
     <script>
-        // This is where we'll write our API fetching code for posts
-        fetch('https://jsonplaceholder.typicode.com/posts')
-          .then(response => response.json())
-          .then(data => {
-              const postsContainer = document.getElementById('posts-container');
-              data.forEach(post => {
-                  // Create a div for each post
-                  const postDiv = document.createElement('div');
-                  postDiv.classList.add('post');
-                  
-                  // Add post title
-                  const postTitle = document.createElement('h3');
-                  postTitle.innerText = post.title;
-                  postDiv.appendChild(postTitle);
-                  
-                  // Add post body
-                  const postBody = document.createElement('p');
-                  postBody.innerText = post.body;
-                  postDiv.appendChild(postBody);
+        const questions = {
+            science: [
+                "What is the speed of light?",
+                "What planet is known as the Red Planet?",
+                "What is the chemical symbol for oxygen?",
+                "Who developed the theory of relativity?",
+                "What is the powerhouse of the cell?",
+                "What is the primary gas in Earth's atmosphere?",
+                "Who is known as the father of modern physics?",
+                "What is H2O commonly known as?",
+                "What planet has the most gravity?",
+                "What is the rarest blood type?"
+            ],
+            history: [
+                "Who was the first President of the United States?",
+                "In what year did World War II end?",
+                "Who was the famous leader of the Mongols?",
+                "What was the ancient name of Istanbul?",
+                "Who discovered America?",
+                "What year did the Titanic sink?",
+                "Who was the first Emperor of China?",
+                "What was the Renaissance?",
+                "Who was Cleopatra?",
+                "What was the name of the first human civilization?"
+            ],
+            literature: [
+                "Who wrote 'Pride and Prejudice'?",
+                "What is the first book of the Bible?",
+                "Who wrote 'The Raven'?",
+                "What genre is '1984' by George Orwell?",
+                "What is the longest novel written by Leo Tolstoy?",
+                "Who is the author of 'Moby Dick'?",
+                "What is Shakespeare's shortest tragedy?",
+                "In which country is 'The Little Prince' originally written?",
+                "Who is the famous detective created by Arthur Conan Doyle?",
+                "What is the central theme of 'Animal Farm'?"
+            ]
+        };
 
-                  // Append the post div to the container
-                  postsContainer.appendChild(postDiv);
-              });
-          })
-          .catch(error => console.error('Error fetching data:', error));
+        let currentCategory = "";
 
-          // Fetch and display users
-        fetch('https://jsonplaceholder.typicode.com/users')
-          .then(response => response.json())
-          .then(users => {
-              const usersContainer = document.getElementById('users-container');
-              users.forEach(user => {
-                  const userDiv = document.createElement('div');
-                  userDiv.classList.add('user');
-                  
-                  const userName = document.createElement('h3');
-                  userName.innerText = user.name;
-                  userDiv.appendChild(userName);
-                  
-                  const userEmail = document.createElement('p');
-                  userEmail.innerText = `Email: ${user.email}`;
-                  userDiv.appendChild(userEmail);
+        function generateRandomQuestion() {
+            const category = document.getElementById("category").value;
+            const questionText = document.getElementById("questionText");
 
-                  const userAddress = document.createElement('p');
-                  userAddress.innerText = `Address: ${user.address.street}, ${user.address.city}`;
-                  userDiv.appendChild(userAddress);
+            // Validate category selection
+            if (!category) {
+                questionText.textContent = "Please select a category.";
+                return;
+            }
 
-                  usersContainer.appendChild(userDiv);
-              });
-          })
-          .catch(error => console.error('Error fetching users:', error));
+            // Save current category and show the question display
+            currentCategory = category;
+            const question = getRandomQuestionFromCategory(category);
+            questionText.textContent = "Question: " + question;
+
+            // Toggle display
+            document.getElementById("homeScreen").style.display = "none";
+            document.getElementById("questionDisplay").style.display = "block";
+        }
+
+        function getRandomQuestionFromCategory(category) {
+            const categoryQuestions = questions[category];
+            const randomIndex = Math.floor(Math.random() * categoryQuestions.length);
+            return categoryQuestions[randomIndex];
+        }
+
+        function regenerateQuestion() {
+            const questionText = document.getElementById("questionText");
+            const question = getRandomQuestionFromCategory(currentCategory);
+            questionText.textContent = "Question: " + question;
+        }
+
+        function returnToHome() {
+            // Reset category selection and toggle display
+            document.getElementById("category").value = "";
+            document.getElementById("homeScreen").style.display = "block";
+            document.getElementById("questionDisplay").style.display = "none";
+        }
     </script>
+
 </body>
 </html>
