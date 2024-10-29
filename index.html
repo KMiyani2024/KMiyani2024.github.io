@@ -25,7 +25,7 @@
         }
 
         /* Card and Container Styles */
-        .card-container, .question-container, .answer-container, .feedback-container {
+        .card-container, .question-container, .answer-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -43,7 +43,7 @@
             align-items: center;
             justify-content: center;
             color: ivory;
-            font-size: 2em;
+            font-size: 4em;
             text-align: center;
             cursor: pointer;
             transition: transform 0.3s;
@@ -86,22 +86,6 @@
             background-color: #FFB300; /* Slightly darker gold */
         }
 
-        /* Feedback Container */
-        .feedback-container {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            color: ivory;
-        }
-        .feedback-message {
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
-        .emoji {
-            font-size: 4em;
-            margin-bottom: 10px;
-        }
     </style>
 </head>
 <body>
@@ -128,21 +112,8 @@
     <div id="answerDisplay" class="answer-container" style="display: none;">
         <div class="answer-box">
             <div id="answerText"></div>
-            <button class="button" onclick="markCorrect()">Correct</button>
-            <button class="button" onclick="markIncorrect()">Incorrect</button>
+            <button class="button" onclick="returnToHome()">Return to Home</button>
         </div>
-    </div>
-
-    <!-- Feedback Pages for Correct/Incorrect -->
-    <div id="correctFeedback" class="feedback-container">
-        <div class="emoji">🎉</div>
-        <div class="feedback-message">Correct! Shubh Diwali! ✨</div>
-        <button class="button" onclick="returnToHome()">Return to Home</button>
-    </div>
-    <div id="incorrectFeedback" class="feedback-container">
-        <div class="emoji">🙏</div>
-        <div class="feedback-message">Try Again! 🌼 Keep Going!</div>
-        <button class="button" onclick="returnToHome()">Return to Home</button>
     </div>
 
     <script>
